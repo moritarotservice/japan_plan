@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Salon Guest Check | 外国人のお客様向け予約前確認フォーム</title>
+    <meta
+      name="description"
+      content="美容室・サロン向け。外国人のお客様にキャンセル、遅刻、支払い、施術前の注意事項を来店前に案内できる予約前確認フォーム。"
+    >
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Salon Guest Check home">
+        <span class="brand-mark" aria-hidden="true">SG</span>
+        <span>Salon Guest Check</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#builder">作成</a>
+        <a href="#preview">プレビュー</a>
+        <a href="#next">次のステップ</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">美容室・サロン向け</p>
+          <h1>外国人のお客様向け予約前確認フォームを3分で作成</h1>
+          <p class="lead">
+            キャンセル・遅刻・支払い・施術前の注意事項を来店前に確認し、
+            DM対応と当日の認識違いを減らします。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#builder">無料で作成</a>
+            <a class="button secondary" href="#preview">サンプルを見る</a>
+          </div>
+        </div>
+        <figure class="hero-media" aria-label="Salon consultation image">
+          <img
+            src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=80"
+            alt="美容室でカウンセリングをしている様子"
+          >
+        </figure>
+      </section>
+
+      <section class="pain-grid" aria-label="Main use cases">
+        <article>
+          <span class="icon" aria-hidden="true">DM</span>
+          <h2>DM説明を短縮</h2>
+          <p>外国人のお客様に毎回同じ予約ルールを説明する手間を減らします。</p>
+        </article>
+        <article>
+          <span class="icon" aria-hidden="true">NO</span>
+          <h2>認識違いを予防</h2>
+          <p>遅刻、キャンセル、支払い方法を来店前に明確に案内します。</p>
+        </article>
+        <article>
+          <span class="icon" aria-hidden="true">IN</span>
+          <h2>事前確認を整理</h2>
+          <p>希望スタイル写真、アレルギー、注意事項を確認する導線を作れます。</p>
+        </article>
+      </section>
+
+      <section class="workspace" aria-label="Form builder workspace">
+        <form id="builder" class="builder" novalidate>
+          <div class="section-heading">
+            <p class="eyebrow">Step 1</p>
+            <h2>確認フォームを作成</h2>
+          </div>
+
+          <label>
+            <span>店名</span>
+            <input id="shopName" name="shopName" type="text" placeholder="例：Aoyama Color Studio" required>
+          </label>
+
+          <label>
+            <span>サービス種別</span>
+            <select id="serviceType" name="serviceType" required>
+              <option value="Hair color / bleach">Hair color / bleach</option>
+              <option value="Nail art">Nail art</option>
+              <option value="Eyelash / eyebrow">Eyelash / eyebrow</option>
+              <option value="Head spa">Head spa</option>
+              <option value="Esthetic">Esthetic</option>
+              <option value="Perm / extension">Perm / extension</option>
+            </select>
+          </label>
+
+          <label>
+            <span>最寄り駅または住所</span>
+            <input id="location" name="location" type="text" placeholder="例：表参道駅 A2出口 徒歩3分" required>
+          </label>
+
+          <label>
+            <span>予約・店舗リンク</span>
+            <input id="shopLink" name="shopLink" type="url" placeholder="Instagram / Web / Google Maps URL">
+          </label>
+
+          <div class="field-row">
+            <label>
+              <span>キャンセル期限</span>
+              <select id="cancelPolicy" name="cancelPolicy">
+                <option value="Please cancel or reschedule at least 24 hours before your appointment.">
+                  24時間前まで
+                </option>
+                <option value="Please cancel or reschedule at least 48 hours before your appointment.">
+                  48時間前まで
+                </option>
+                <option value="Same-day cancellations may be charged a cancellation fee.">
+                  当日キャンセル料あり
+                </option>
+                <option value="No-shows may be charged the full service fee.">
+                  無断キャンセルは全額
+                </option>
+              </select>
+            </label>
+
+            <label>
+              <span>遅刻ルール</span>
+              <select id="latePolicy" name="latePolicy">
+                <option value="If you are more than 10 minutes late, your service time may be shortened.">
+                  10分以上で時間短縮
+                </option>
+                <option value="If you are more than 15 minutes late, your appointment may be cancelled.">
+                  15分以上でキャンセル可能性
+                </option>
+                <option value="Please contact us if you expect to be late.">
+                  遅れる場合は連絡
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>支払い方法</legend>
+            <div class="checks">
+              <label><input type="checkbox" name="payments" value="Cash" checked> 現金</label>
+              <label><input type="checkbox" name="payments" value="Credit card" checked> クレジットカード</label>
+              <label><input type="checkbox" name="payments" value="QR payment"> QR決済</label>
+              <label><input type="checkbox" name="payments" value="Transportation IC card"> 交通系IC</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>事前確認したいこと</legend>
+            <div class="checks">
+              <label><input type="checkbox" name="intake" value="Please prepare reference photos of your desired style." checked> 希望写真</label>
+              <label><input type="checkbox" name="intake" value="Please tell us about allergies or skin sensitivities before your visit." checked> アレルギー</label>
+              <label><input type="checkbox" name="intake" value="Please tell us your current hair or skin condition before your visit."> 髪・肌の状態</label>
+              <label><input type="checkbox" name="intake" value="Final service availability will be confirmed by the salon on the day."> 当日確認</label>
+            </div>
+          </fieldset>
+
+          <label>
+            <span>追加の注意事項</span>
+            <textarea id="extraNotes" name="extraNotes" rows="4" placeholder="例：ブリーチ履歴がある場合は事前にお知らせください。"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button class="button primary" type="button" id="generateButton">プレビューを更新</button>
+            <p class="hint">入力内容はこのブラウザ内でのみ保存されます。</p>
+          </div>
+        </form>
+
+        <aside id="preview" class="preview-panel" aria-label="Generated confirmation preview">
+          <div class="section-heading">
+            <p class="eyebrow">Step 2</p>
+            <h2>Guest preview</h2>
+          </div>
+          <div id="guestPreview" class="guest-card"></div>
+        </aside>
+      </section>
+
+      <section id="next" class="capture">
+        <div>
+          <p class="eyebrow">Step 3</p>
+          <h2>確認リンクを受け取る</h2>
+          <p>
+            メールアドレスを入力すると、確認リンク用のサンプルと Pro 版の案内を表示します。
+          </p>
+        </div>
+        <form id="emailForm" class="email-form">
+          <label>
+            <span>メールアドレス</span>
+            <input id="email" type="email" placeholder="owner@example.com" required>
+          </label>
+          <button class="button primary" type="submit">確認リンクを取得</button>
+        </form>
+        <div id="linkResult" class="link-result" hidden></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Salon Guest Check MVP. 医療問診や安全判断は行いません。最終的な施術可否は店舗で確認してください。</p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
