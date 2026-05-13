@@ -337,6 +337,14 @@ fieldset {
   font-size: 0.9rem;
 }
 
+.status-message {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  color: var(--accent-strong);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .guest-card {
   display: grid;
   gap: 15px;
@@ -344,6 +352,13 @@ fieldset {
   border-radius: 8px;
   background: var(--surface-strong);
   padding: 20px;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.guest-card.updated {
+  border-color: rgba(31, 111, 99, 0.58);
+  box-shadow: 0 14px 34px rgba(31, 111, 99, 0.12);
+  transform: translateY(-2px);
 }
 
 .guest-card header {
@@ -402,6 +417,13 @@ fieldset {
   margin-top: 8px;
   overflow-x: auto;
   color: var(--accent-strong);
+}
+
+.link-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .footer {

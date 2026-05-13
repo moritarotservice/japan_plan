@@ -161,6 +161,7 @@
             <button class="button primary" type="button" id="generateButton">プレビューを更新</button>
             <p class="hint">入力内容はこのブラウザ内でのみ保存されます。</p>
           </div>
+          <p id="builderStatus" class="status-message" aria-live="polite"></p>
         </form>
 
         <aside id="preview" class="preview-panel" aria-label="Generated confirmation preview">
@@ -186,6 +187,7 @@
             <input id="email" type="email" placeholder="owner@example.com" required>
           </label>
           <button class="button primary" type="submit">確認リンクを取得</button>
+          <p id="emailStatus" class="status-message" aria-live="polite"></p>
         </form>
         <div id="linkResult" class="link-result" hidden></div>
       </section>

@@ -5,6 +5,8 @@ const preview = document.querySelector("#guestPreview");
 const generateButton = document.querySelector("#generateButton");
 const emailForm = document.querySelector("#emailForm");
 const linkResult = document.querySelector("#linkResult");
+const builderStatus = document.querySelector("#builderStatus");
+const emailStatus = document.querySelector("#emailStatus");
 
 const fields = [
   "shopName",
@@ -26,6 +28,15 @@ const track = (eventName, payload = {}) => {
   localStorage.setItem("sgc_events", JSON.stringify(events.slice(-80)));
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: eventName, ...payload });
+};
+
+const setStatus = (element, message) => {
+  element.textContent = message;
+  window.clearTimeout(element.dataset.timer);
+  const timer = window.setTimeout(() => {
+    element.textContent = "";
+  }, 3200);
+  element.dataset.timer = String(timer);
 };
 
 const getCheckedValues = (name) =>
@@ -111,6 +122,11 @@ const renderPreview = () => {
     </section>
   `;
 
+  preview.classList.remove("updated");
+  window.requestAnimationFrame(() => {
+    preview.classList.add("updated");
+  });
+
   saveState();
   track("preview_generated", {
     serviceType: data.serviceType,
@@ -147,15 +163,22 @@ form.addEventListener("input", () => {
 generateButton.addEventListener("click", () => {
   renderPreview();
   track("form_completed", { source: "manual_preview_button" });
+  setStatus(builderStatus, "プレビューを更新しました。右側の Guest preview を確認してください。");
+  document.querySelector("#preview").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 emailForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const email = document.querySelector("#email").value.trim();
   const data = getFormData();
-  if (!email) return;
+  if (!email || !document.querySelector("#email").checkValidity()) {
+    setStatus(emailStatus, "有効なメールアドレスを入力してください。");
+    return;
+  }
 
   const sampleLink = createSampleLink(data.shopName);
+  const dmTemplate =
+    "Please check our booking guide before making a reservation. It includes cancellation, late arrival, payment, and pre-service notes.";
   localStorage.setItem("sgc_lead", JSON.stringify({ email, ...data, sampleLink }));
   track("email_submitted_for_link", {
     serviceType: data.serviceType,
@@ -167,8 +190,26 @@ emailForm.addEventListener("submit", (event) => {
     <strong>確認リンクのサンプルを作成しました。</strong>
     <p>実運用版では、このリンクを Instagram DM、LINE、Hot Pepper 備考、Google Business に貼れます。</p>
     <code>${sampleLink}</code>
-    <p><button class="button secondary" type="button" id="proInterest">顧客回答・写真を受け取る Pro 版を試す</button></p>
+    <div class="link-actions">
+      <button class="button secondary" type="button" id="copyLink">リンクをコピー</button>
+      <button class="button secondary" type="button" id="copyDm">DM文をコピー</button>
+      <button class="button primary" type="button" id="proInterest">顧客回答・写真を受け取る Pro 版を試す</button>
+    </div>
   `;
+  setStatus(emailStatus, "確認リンクを作成しました。下に表示されています。");
+  linkResult.scrollIntoView({ behavior: "smooth", block: "center" });
+
+  document.querySelector("#copyLink").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(sampleLink);
+    track("sample_link_copied", { email });
+    setStatus(emailStatus, "確認リンクをコピーしました。");
+  });
+
+  document.querySelector("#copyDm").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(dmTemplate);
+    track("dm_template_copied", { email });
+    setStatus(emailStatus, "Instagram DM 用の文面をコピーしました。");
+  });
 
   document.querySelector("#proInterest").addEventListener("click", () => {
     track("pro_interest_clicked", { email });
