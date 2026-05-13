@@ -7,6 +7,111 @@ const emailForm = document.querySelector("#emailForm");
 const linkResult = document.querySelector("#linkResult");
 const builderStatus = document.querySelector("#builderStatus");
 const emailStatus = document.querySelector("#emailStatus");
+const languageTabs = Array.from(document.querySelectorAll(".tab[data-lang]"));
+let activeLang = "en";
+
+const i18n = {
+  en: {
+    label: "Booking guide",
+    beforeBooking: "Before booking",
+    beforeBookingBody:
+      "Please read this guide before confirming your appointment. Final service availability will be confirmed by the salon.",
+    cancellation: "Cancellation policy",
+    lateArrival: "Late arrival",
+    payment: "Payment methods",
+    beforeVisit: "Before your visit",
+    dmTitle: "Send this before DM booking",
+    dmBody:
+      "Please check our booking guide before making a reservation. It includes cancellation, late arrival, payment, and pre-service notes.",
+    noteTitle: "Salon note",
+    noteDisclaimer: "This custom note is shown as entered by the salon and is not automatically translated in this MVP.",
+  },
+  zh: {
+    label: "預約前說明",
+    beforeBooking: "預約前",
+    beforeBookingBody: "確認預約前請先閱讀此說明。最終是否能提供服務，會由店家現場確認。",
+    cancellation: "取消規則",
+    lateArrival: "遲到規則",
+    payment: "付款方式",
+    beforeVisit: "到店前注意事項",
+    dmTitle: "預約 DM 前可發送",
+    dmBody: "預約前請先確認本說明，內容包含取消、遲到、付款與服務前注意事項。",
+    noteTitle: "店家補充",
+    noteDisclaimer: "此補充內容會依店家輸入顯示，目前 MVP 不會自動翻譯自由輸入文字。",
+  },
+  ko: {
+    label: "예약 전 안내",
+    beforeBooking: "예약 전",
+    beforeBookingBody: "예약을 확정하기 전에 이 안내를 확인해 주세요. 최종 서비스 가능 여부는 매장에서 확인합니다.",
+    cancellation: "취소 규정",
+    lateArrival: "지각 안내",
+    payment: "결제 방법",
+    beforeVisit: "방문 전 확인사항",
+    dmTitle: "DM 예약 전에 보내기",
+    dmBody: "예약 전에 취소, 지각, 결제, 시술 전 주의사항이 포함된 안내를 확인해 주세요.",
+    noteTitle: "매장 추가 안내",
+    noteDisclaimer: "이 추가 안내는 매장이 입력한 원문으로 표시되며, 현재 MVP에서는 자동 번역되지 않습니다.",
+  },
+};
+
+const translations = {
+  cancelPolicy: {
+    "Please cancel or reschedule at least 24 hours before your appointment.": {
+      zh: "請至少在預約時間 24 小時前取消或更改時間。",
+      ko: "예약 변경 또는 취소는 최소 24시간 전까지 해 주세요.",
+    },
+    "Please cancel or reschedule at least 48 hours before your appointment.": {
+      zh: "請至少在預約時間 48 小時前取消或更改時間。",
+      ko: "예약 변경 또는 취소는 최소 48시간 전까지 해 주세요.",
+    },
+    "Same-day cancellations may be charged a cancellation fee.": {
+      zh: "當日取消可能會收取取消費。",
+      ko: "당일 취소 시 취소 수수료가 발생할 수 있습니다.",
+    },
+    "No-shows may be charged the full service fee.": {
+      zh: "未到店且未事先聯絡，可能會收取全額服務費。",
+      ko: "노쇼의 경우 서비스 비용 전액이 청구될 수 있습니다.",
+    },
+  },
+  latePolicy: {
+    "If you are more than 10 minutes late, your service time may be shortened.": {
+      zh: "若遲到超過 10 分鐘，服務時間可能會縮短。",
+      ko: "10분 이상 늦는 경우 서비스 시간이 줄어들 수 있습니다.",
+    },
+    "If you are more than 15 minutes late, your appointment may be cancelled.": {
+      zh: "若遲到超過 15 分鐘，預約可能會被取消。",
+      ko: "15분 이상 늦는 경우 예약이 취소될 수 있습니다.",
+    },
+    "Please contact us if you expect to be late.": {
+      zh: "若可能遲到，請提前聯絡店家。",
+      ko: "늦을 것 같으면 미리 매장에 연락해 주세요.",
+    },
+  },
+  payments: {
+    Cash: { zh: "現金", ko: "현금" },
+    "Credit card": { zh: "信用卡", ko: "신용카드" },
+    "QR payment": { zh: "QR 支付", ko: "QR 결제" },
+    "Transportation IC card": { zh: "交通 IC 卡", ko: "교통 IC 카드" },
+  },
+  intake: {
+    "Please prepare reference photos of your desired style.": {
+      zh: "請事先準備希望造型的參考照片。",
+      ko: "원하는 스타일의 참고 사진을 준비해 주세요.",
+    },
+    "Please tell us about allergies or skin sensitivities before your visit.": {
+      zh: "若有過敏或皮膚敏感，請在到店前告知。",
+      ko: "알레르기나 피부 민감성이 있다면 방문 전에 알려 주세요.",
+    },
+    "Please tell us your current hair or skin condition before your visit.": {
+      zh: "請在到店前告知目前頭髮或皮膚狀況。",
+      ko: "현재 모발 또는 피부 상태를 방문 전에 알려 주세요.",
+    },
+    "Final service availability will be confirmed by the salon on the day.": {
+      zh: "最終是否能提供服務，會由店家於當日現場確認。",
+      ko: "최종 서비스 가능 여부는 당일 매장에서 확인합니다.",
+    },
+  },
+};
 
 const fields = [
   "shopName",
@@ -41,6 +146,11 @@ const setStatus = (element, message) => {
 
 const getCheckedValues = (name) =>
   Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map((item) => item.value);
+
+const translateValue = (group, value) => {
+  if (activeLang === "en") return value;
+  return translations[group]?.[value]?.[activeLang] || value;
+};
 
 const getFormData = () => ({
   shopName: document.querySelector("#shopName").value.trim() || "Your Salon",
@@ -77,48 +187,60 @@ const restoreState = () => {
 
 const renderPreview = () => {
   const data = getFormData();
-  const paymentText = data.payments.length > 0 ? data.payments.join(", ") : "Please ask the salon.";
+  const copy = i18n[activeLang];
+  const paymentText =
+    data.payments.length > 0
+      ? data.payments.map((item) => translateValue("payments", item)).join(", ")
+      : activeLang === "en"
+        ? "Please ask the salon."
+        : activeLang === "zh"
+          ? "請向店家確認。"
+          : "매장에 확인해 주세요.";
   const intakeItems =
     data.intake.length > 0
-      ? data.intake.map((item) => `<li>${item}</li>`).join("")
-      : "<li>Please check important notes before your visit.</li>";
+      ? data.intake.map((item) => `<li>${translateValue("intake", item)}</li>`).join("")
+      : `<li>${copy.beforeVisit}</li>`;
 
   preview.innerHTML = `
     <header>
-      <p class="eyebrow">Booking guide</p>
+      <p class="eyebrow">${copy.label}</p>
       <h3>${escapeHtml(data.shopName)}</h3>
       <p class="meta">${escapeHtml(data.serviceType)} · ${escapeHtml(data.location)}</p>
     </header>
 
     <section>
-      <h3>Before booking</h3>
-      <p>Please read this guide before confirming your appointment. Final service availability will be confirmed by the salon.</p>
+      <h3>${copy.beforeBooking}</h3>
+      <p>${copy.beforeBookingBody}</p>
     </section>
 
     <section>
-      <h3>Cancellation policy</h3>
-      <p>${escapeHtml(data.cancelPolicy)}</p>
+      <h3>${copy.cancellation}</h3>
+      <p>${escapeHtml(translateValue("cancelPolicy", data.cancelPolicy))}</p>
     </section>
 
     <section>
-      <h3>Late arrival</h3>
-      <p>${escapeHtml(data.latePolicy)}</p>
+      <h3>${copy.lateArrival}</h3>
+      <p>${escapeHtml(translateValue("latePolicy", data.latePolicy))}</p>
     </section>
 
     <section>
-      <h3>Payment methods</h3>
+      <h3>${copy.payment}</h3>
       <p>${escapeHtml(paymentText)}</p>
     </section>
 
     <section>
-      <h3>Before your visit</h3>
+      <h3>${copy.beforeVisit}</h3>
       <ul>${intakeItems}</ul>
-      ${data.extraNotes ? `<p>${escapeHtml(data.extraNotes)}</p>` : ""}
+      ${
+        data.extraNotes
+          ? `<p><strong>${copy.noteTitle}:</strong> ${escapeHtml(data.extraNotes)}</p><p class="meta">${copy.noteDisclaimer}</p>`
+          : ""
+      }
     </section>
 
     <section>
-      <h3>Send this before DM booking</h3>
-      <p>Please check our booking guide before making a reservation. It includes cancellation, late arrival, payment, and pre-service notes.</p>
+      <h3>${copy.dmTitle}</h3>
+      <p>${copy.dmBody}</p>
     </section>
   `;
 
@@ -158,6 +280,19 @@ form.addEventListener("input", () => {
     formStarted = true;
   }
   renderPreview();
+});
+
+languageTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    activeLang = tab.dataset.lang;
+    languageTabs.forEach((item) => {
+      const isActive = item === tab;
+      item.classList.toggle("active", isActive);
+      item.setAttribute("aria-selected", String(isActive));
+    });
+    renderPreview();
+    track("preview_language_changed", { language: activeLang });
+  });
 });
 
 generateButton.addEventListener("click", () => {
